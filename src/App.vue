@@ -4,6 +4,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <div>
+    <v-btn>Test Vuetify</v-btn>
     {{ $t('message.hello') }}
   </div>
   <RouterView />
