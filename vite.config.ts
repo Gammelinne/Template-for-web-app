@@ -11,9 +11,13 @@ export default defineConfig({
     vueJsx(),
     VitePWA({
       registerType: 'autoUpdate',
-      devOptions: {
-        enabled: true
-      },
+
+      // workbox options for generateSW (PWA)
+      // devOptions: {
+      //   enabled: true
+      // },
+      
+      // manifest options
       manifest: {
         name: 'Vite Vue3 Vuetify',
         short_name: 'Vite Vue3 Vuetify',
