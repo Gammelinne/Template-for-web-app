@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import NavBar from './components/NavBar.vue'
 </script>
 
 <template>
-  <div>
-    <v-btn>Test Vuetify</v-btn>
-    {{ $t('message.hello') }}
-  </div>
+  <header>
+    <NavBar />
+  </header>
   <RouterView />
 </template>
 
+<script lang="ts">
+export default {
+  name: 'App',
+  components: {
+    NavBar
+  }
+}
+</script>
 <style scoped></style>

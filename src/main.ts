@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+
+//Pinia
+import piniaProvider from './pinia-provider';
 
 //I18n from ./i18n.ts
 import i18n from './i18n'
@@ -19,10 +21,9 @@ import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
-
+piniaProvider(app)
 app.use(i18n)
 app.use(vuetify)
-app.use(createPinia())
 app.use(router)
 
 app.mount('#app')

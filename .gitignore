@@ -27,5 +27,7 @@ coverage
 *.sln
 *.sw?
 
+.env
+
 /ios/
 /android/
