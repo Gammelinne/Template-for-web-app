@@ -1,21 +1,32 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import NavBar from './components/NavBar.vue'
+import { onMounted } from 'vue'
+import { authStore } from '@/pinia-provider'
+import { io } from 'socket.io-client'
+import { themeStore } from '@/pinia-provider'
+import NavBar from '@/components/NavBar.vue'
+import FooterBar from '@/components/FooterBar.vue'
+
+const setupSocket = async () => {
+  if (authStore.isLoggedIn) {
+    const socket = io(import.meta.env.VITE_API_URL)
+    await authStore.fetchUser()
+    console.log(authStore.user)
+    socket.emit('join', authStore.user.id)
+  }
+}
+
+onMounted(() => {
+  setupSocket()
+})
 </script>
 
 <template>
-  <header>
+  <VApp :theme="themeStore.isLight ? 'light' : 'dark'">
     <NavBar />
-  </header>
-  <RouterView />
+    <VMain>
+      <RouterView />
+    </VMain>
+    <FooterBar />
+  </VApp>
 </template>
-
-<script lang="ts">
-export default {
-  name: 'App',
-  components: {
-    NavBar
-  }
-}
-</script>
-<style scoped></style>

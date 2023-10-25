@@ -1,5 +1,46 @@
 {
-  "message": {
-    "hello": "Hello, World! mais en fr"
+  "register": {
+    "title": "S'inscrire",
+    "description": "Bienvenue sur {appName}. Créez votre compte gratuitement !",
+    "welcome": "Pas encore inscrit ? créer ton compte gratuitement !"
+  },
+  "login": {
+    "stepOne": "Vos informations",
+    "stepTwo": "Vérifier l'email",
+    "title": "Se connecter",
+    "description": "Bon retour sur {appName}.",
+    "forgotPassword": "Mot de passe oublié ?",
+    "sentMailSuccess": "Email envoyé",
+    "welcomeback": "Déjà inscrit ? connecte toi !",
+    "password": {
+      "title": "Changer de mot de passe",
+      "success": "Mot de passe changé",
+      "btn":{
+        "resetPassword": "Change ton mot de passe",
+        "resetPasswordMail" : "Envoyer mail"
+      }
+    }
+  },
+  "form": {
+    "continue": "Continuer",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "username": "Nom d'utilisateur",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordLength": "Le mot de passe doit contenir au moins 8 caractères",
+    "passwordMatch": "Les mots de passe doivent être identiques",
+    "passwordUpperCase": "Le mot de passe doit contenir au moins une majuscule",
+    "passwordNumber": "Le mot de passe doit contenir au moins un chiffre",
+    "passwordSpecialChar": "Le mot de passe doit contenir au moins un caractère spécial"
+  },
+  "footer": {
+    "message": "Un projet open source par RENAULT Kylian"
+  },
+  "setting": {
+    "title": "Paramètres",
+    "language": "Langage",
+    "theme": "theme"
   }
 }

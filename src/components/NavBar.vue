@@ -1,24 +1,35 @@
 <script setup lang="ts">
-import { themeStore } from '../pinia-provider'
-const appName = import.meta.env.VITE_APP_NAME
-</script>
-<template>
-  <VApp :theme="themeStore.isLight ? 'light' : 'dark'">
-    <VAppBar app>
-      <VToolbarTitle> {{appName}} </VToolbarTitle>
-      <VBtn @click="toggleTheme">Theme = {{ themeStore.isLight }}</VBtn>
-    </VAppBar>
-  </VApp>
-</template>
+import DrawerSetting from './atoms/navbar/DrawerSetting.vue'
+import ThemeToggleButton from '@/components/atoms/navbar/ThemeToggleButton.vue'
+import LanguageSelector from '@/components/atoms/navbar/LanguageSelector.vue'
+import { authStore } from '@/pinia-provider'
+import { ref } from 'vue'
 
-<script lang="ts">
-export default {
-  name: 'NavBar',
-  created() {},
-  methods: {
-    toggleTheme() {
-      themeStore.toggleTheme()
-    }
-  }
+const appName = import.meta.env.VITE_APP_NAME
+let drawer = ref(false)
+
+const toggleDrawer = () => {
+  drawer.value = !drawer.value
 }
 </script>
+
+<template>
+  <VAppBar app>
+    <VToolbarTitle> {{ appName }} </VToolbarTitle>
+    <VSpacer />
+    <ThemeToggleButton v-if="!authStore.isLoggedIn" />
+    <LanguageSelector v-if="!authStore.isLoggedIn" />
+    <VBtn v-if="authStore.isLoggedIn" icon @click="toggleDrawer">
+      <VAvatar :icon="authStore.user.avatar"></VAvatar>
+    </VBtn>
+  </VAppBar>
+  <VNavigationDrawer
+    v-if="authStore.isLoggedIn"
+    v-model="drawer"
+    location="right"
+    temporary
+    width="175"
+  >
+    <DrawerSetting />
+  </VNavigationDrawer>
+</template>

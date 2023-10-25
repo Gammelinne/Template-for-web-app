@@ -1,5 +1,48 @@
 {
-  "message": {
-    "hello": "Hello, World!"
+  "register": {
+    "title": "Register",
+    "description": "Welcome to {appName}. Create your account for free !",
+    "welcome": "Not a member? Register now."
+  },
+  "login": {
+    "stepOne": "Your informations",
+    "stepTwo": "Email verification",
+    "title": "Login",
+    "description": "Welcome back to {appName}.",
+    "forgotPassword": "Forgot password?",
+    "sentMailSuccess": "Email sent succefully",
+    "welcomeback": " Already a member? Login now.",
+    "password": {
+      "title": "Reset password form",
+      "success": "Password succefully reset",
+      "btn": {
+        "resetPassword": "Change your password",
+        "resetPasswordMail": "Send email"
+      }
+    }
+  },
+  "form": {
+    "continue": "Continue",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordLength": "Password must between 8 and 32 characters",
+    "passwordMatch": "Passwords must match",
+    "passwordUpperCase": "Password must contain at least one upper case letter",
+    "passwordNumber": "Password must contain at least one number",
+    "passwordSpecialChar": "Password must contain at least one special character",
+    "emailConfirmation": "We have sent you an email to confirm your email address. Please check your inbox.",
+    "resendEmail": "Resend email"
+  },
+  "footer": {
+    "message": "A open Source project made by RENAULT Kylian"
+  },
+  "setting": {
+    "title": "Settings",
+    "theme": "theme",
+    "language": "Language"
   }
 }
