@@ -1,6 +1,6 @@
 # Vue 3 Web App Template
 
-This project serves as a foundational template for Vue 3 web applications using Vite. It includes key integrations and features for efficient development.
+This project serves as a foundational template for Vue 3 web applications using Vite. It includes key integrations and features for efficient development. It's work perfectely with my backend template made with adonis.
 
 ## Features
 
@@ -8,7 +8,8 @@ This project serves as a foundational template for Vue 3 web applications using 
 - **Capacitor Integration:** Build cross-platform mobile applications.
 - **WebSockets:** Real-time bidirectional communication.
 - **Internationalization (i18n):** Multilingual support with Vue i18n.
-- **Google Recaptcha:** Secure form submission with Vue Recaptcha.
+- **Google Recaptcha:** Secure form submission with Vue Recaptcha. (need token from google api website)
+- **Google OAuth2** Secure connexion with google login library. (need token from google api website)
 - **Vuetify for Material Design:** Material design components for a rich UI.
 
 ### Code Quality and Tools
