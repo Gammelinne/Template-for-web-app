@@ -9,9 +9,12 @@ export interface AuthUser {
     id?: string
     avatar?: string
     email?: string
+    username?: string
+    firstName?: string
+    lastName?: string
   }
   loading: boolean
-  error: { message: string; errors?: Record<string, string[]> } | null
+  error: any
 }
 
 export const useAuthStore = defineStore({
@@ -30,7 +33,15 @@ export const useAuthStore = defineStore({
       state.error
   },
   actions: {
-    async login({ email, password }: { email: string; password: string }): Promise<void> {
+    async login({
+      email,
+      password,
+      recpatchaToken
+    }: {
+      email: string
+      password: string
+      recpatchaToken: string
+    }): Promise<void> {
       try {
         this.error = null
         this.loading = true
@@ -39,6 +50,7 @@ export const useAuthStore = defineStore({
           token: { token: string; type: string }
           user: { id?: string; avatar?: string; email?: string }
         }> = await axios.post('/login', {
+          recpatchaToken,
           email,
           password
         })
@@ -46,23 +58,56 @@ export const useAuthStore = defineStore({
         this.handleAuthSuccess(token.token, loggedInUser)
       } catch (error) {
         this.handleAuthError(error)
+        router.push('/login')
         localStorage.removeItem('token')
       }
     },
 
-    async register(newUser: { email: string; password: string }): Promise<boolean> {
+    async register(
+      newUser: { email: string; password: string },
+      recpatchaToken: string
+    ): Promise<boolean> {
       try {
         localStorage.removeItem('token')
         this.error = null
         this.loading = true
-        await axios.post('/register', newUser).then((response) => {
-          this.user.id = response.data.userId
-        })
+        await axios
+          .post('/register', {
+            newUser,
+            recpatchaToken
+          })
+          .then((response) => {
+            this.user.id = response.data.userId
+          })
         this.loading = false
         return true
-      } catch (error) {
+      } catch (error: any) {
         this.handleAuthError(error)
         return false
+      }
+    },
+
+    async googleRegister(googleData: {
+      clientId: string
+      client_id: string
+      credential: string
+      selected_by: string
+    }) {
+      try {
+        localStorage.removeItem('token')
+        this.error = null
+        this.loading = true
+        await axios
+          .post('/google/redirect', {
+            googleData
+          })
+          .then((response) => {
+            const { token, user: loggedInUser } = response.data
+            this.handleAuthSuccess(token.token, loggedInUser)
+          })
+        this.loading = false
+      } catch (error: any) {
+        this.handleAuthError(error)
       }
     },
 
@@ -88,6 +133,7 @@ export const useAuthStore = defineStore({
         this.user = response.data
         this.loading = false
       } catch (error) {
+        //router.push('/login')
         this.handleAuthError(error)
       }
     },
@@ -176,25 +222,19 @@ export const useAuthStore = defineStore({
     },
 
     handleAuthError(error: any): void {
-      this.error = {
-        message: error.response.data.message,
-        errors: error.response.data.errors
-      }
+      this.error = error.response.data
       localStorage.removeItem('token')
       this.loading = false
     },
 
-    getFieldError(fieldName: string): string[] | undefined {
-      const errors = (this.error?.errors || []) as { field: string; message: string }[]
-      for (const err of errors) {
-        if (err.field === fieldName) {
-          return [err.message]
-        }
+    getFieldError(fieldName: string): string[] {
+      const errors = this.error || {}
+      if (fieldName in errors) {
+        const fieldErrors = errors[fieldName] || null
+        return fieldErrors || []
       }
-
       return []
     },
-
     clearError(): void {
       this.error = null
     },

@@ -42,5 +42,10 @@
     "title": "Paramètres",
     "language": "Langage",
     "theme": "theme"
+  },
+  "404": {
+    "title": "Erreur 404",
+    "score": "Votre score",
+    "button" : "Accueil"
   }
 }

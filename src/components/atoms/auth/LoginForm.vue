@@ -8,10 +8,24 @@ const credential = ref({
   email: '',
   password: ''
 })
-
-const login = () => {
+const recaptcha = async () => {
+  if (instance) {
+    await instance.$recaptchaLoaded()
+    return await instance.$recaptcha('login')
+  }
+}
+const callback = async (response: any) => {
+  // This callback will be triggered when the user selects or login to
+  // his Google account from the popup
+  authStore.googleRegister(response).then(() => {
+    window.location.href = import.meta.env.BASE_URL
+  })
+}
+const login = async () => {
+  const token = await recaptcha()
   authStore
     .login({
+      recpatchaToken: token,
       email: credential.value.email,
       password: credential.value.password
     })
@@ -67,6 +81,7 @@ const props = defineProps({
           {{ $t('login.title') }}
         </VBtn>
       </VForm>
+      <GoogleLogin :callback="callback" prompt auto-login />
       <p class="my-2" @click="$router.push('/register')" style="cursor: pointer">
         {{ $t('register.welcome') }}
       </p>

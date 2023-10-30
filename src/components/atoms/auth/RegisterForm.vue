@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, getCurrentInstance } from 'vue'
 import { authStore } from '@/pinia-provider'
 import PasswordValidator from '@/components/atoms/auth/PasswordValidator.vue'
 const appName = import.meta.env.VITE_APP_NAME
+const instance = getCurrentInstance()?.appContext.config.globalProperties
 
 const props = defineProps({
   userCreated: {
@@ -14,8 +15,15 @@ onBeforeMount(() => {
   authStore.clearError()
 })
 
-const register = () => {
-  authStore.register(registerData.value).then((isRegistered: boolean) => {
+const recaptcha = async () => {
+  if (instance) {
+    await instance.$recaptchaLoaded()
+    return await instance.$recaptcha('login')
+  }
+}
+const register = async () => {
+  const recaptchaToken = await recaptcha()
+  authStore.register(registerData.value, recaptchaToken).then((isRegistered: boolean) => {
     if (isRegistered) {
       props.userCreated(registerData.value)
     }

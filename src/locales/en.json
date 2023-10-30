@@ -44,5 +44,10 @@
     "title": "Settings",
     "theme": "theme",
     "language": "Language"
+  },
+  "404": {
+    "title": "Error 404",
+    "score": "Your score",
+    "button": "Home"
   }
 }

@@ -23,29 +23,32 @@ const router = createRouter({
     {
       name: 'reset-password',
       path: '/reset-password',
-      component: () => import('@/views/ForgotPasswordView.vue'),
-    }
-    /* {
-      name: 'About',
-      path: '/about',
-      component: () => import('@/views/AboutView.vue'),
-      meta: { requiresAuth: false }
+      component: () => import('@/views/ForgotPasswordView.vue')
     },
+    /* {
+      name: 'policies',
+      path: '/policies',
+      component: () => import('@/views/PoliciesView.vue'),
+      meta: { requiresAuth: false }
+    },*/
     {
       name: 'NotFound',
       path: '/:pathMatch(.*)*',
       component: () => import('@/views/NotFoundView.vue'),
       meta: { requiresAuth: false }
-    } */
+    }
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
+  if (authStore.isLoggedIn) {
+    if (to.name === 'Login' || to.name === 'Register') {
+      authStore.logout()
+      next()
+    }
+  }
   if (to.meta.requiresAuth) {
     if (authStore.isLoggedIn) {
-      if (to.name === 'login') {
-        next('/')
-      }
       next()
     } else {
       next('/login')

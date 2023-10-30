@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import DrawerSetting from './atoms/navbar/DrawerSetting.vue'
+import DrawerFooter from './atoms/navbar/DrawerFooter.vue'
 import ThemeToggleButton from '@/components/atoms/navbar/ThemeToggleButton.vue'
 import LanguageSelector from '@/components/atoms/navbar/LanguageSelector.vue'
 import { authStore } from '@/pinia-provider'
@@ -20,7 +21,7 @@ const toggleDrawer = () => {
     <ThemeToggleButton v-if="!authStore.isLoggedIn" />
     <LanguageSelector v-if="!authStore.isLoggedIn" />
     <VBtn v-if="authStore.isLoggedIn" icon @click="toggleDrawer">
-      <VAvatar :icon="authStore.user.avatar"></VAvatar>
+      <VAvatar><v-img cover :src="authStore.user.avatar"></v-img></VAvatar>
     </VBtn>
   </VAppBar>
   <VNavigationDrawer
@@ -31,5 +32,8 @@ const toggleDrawer = () => {
     width="175"
   >
     <DrawerSetting />
+    <template v-slot:append>
+      <DrawerFooter />
+    </template>
   </VNavigationDrawer>
 </template>

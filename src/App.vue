@@ -11,7 +11,6 @@ const setupSocket = async () => {
   if (authStore.isLoggedIn) {
     const socket = io(import.meta.env.VITE_API_URL)
     await authStore.fetchUser()
-    console.log(authStore.user)
     socket.emit('join', authStore.user.id)
   }
 }

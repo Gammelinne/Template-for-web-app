@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, getCurrentInstance } from 'vue'
-import RegisterForm from '@/components/RegisterForm.vue'
+import RegisterForm from '@/components/atoms/auth/RegisterForm.vue'
 import VerifEmail from '@/components/mail/VerifEmail.vue'
 const instance = getCurrentInstance()?.appContext.config.globalProperties
 

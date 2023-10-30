@@ -21,7 +21,6 @@ onBeforeMount(() => {
   authStore.clearError()
   try {
     const socket = io(import.meta.env.VITE_API_URL)
-    console.log(authStore.user)
     socket.emit('join', authStore.user.id)
     socket.on('emailVerified', () => {
       props.emailVerified()
