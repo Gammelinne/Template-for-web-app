@@ -17,9 +17,7 @@ const recaptcha = async () => {
 const callback = async (response: any) => {
   // This callback will be triggered when the user selects or login to
   // his Google account from the popup
-  authStore.googleRegister(response).then(() => {
-    window.location.href = import.meta.env.BASE_URL
-  })
+  authStore.googleRegister(response)
 }
 const login = async () => {
   const token = await recaptcha()

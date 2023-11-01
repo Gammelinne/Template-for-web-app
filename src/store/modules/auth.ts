@@ -56,10 +56,10 @@ export const useAuthStore = defineStore({
         })
         const { token, user: loggedInUser } = response.data
         this.handleAuthSuccess(token.token, loggedInUser)
+        this.fetchUser()
+        router.push('/')
       } catch (error) {
         this.handleAuthError(error)
-        router.push('/login')
-        localStorage.removeItem('token')
       }
     },
 
@@ -104,6 +104,7 @@ export const useAuthStore = defineStore({
           .then((response) => {
             const { token, user: loggedInUser } = response.data
             this.handleAuthSuccess(token.token, loggedInUser)
+            router.push('/')
           })
         this.loading = false
       } catch (error: any) {

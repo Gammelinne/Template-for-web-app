@@ -44,7 +44,6 @@ router.beforeEach(async (to, from, next) => {
   if (authStore.isLoggedIn) {
     if (to.name === 'Login' || to.name === 'Register') {
       authStore.logout()
-      next()
     }
   }
   if (to.meta.requiresAuth) {
