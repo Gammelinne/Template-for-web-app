@@ -21,22 +21,38 @@ onBeforeMount(() => {
   authStore.clearError()
   try {
     const socket = io(import.meta.env.VITE_API_URL)
-    socket.emit('join', authStore.user.id)
+    console.log(props.email)
+    socket.emit('join', props.email)
     socket.on('emailVerified', () => {
       props.emailVerified()
     })
   } catch {
     console.error('error')
+  } finally {
+    resentEmail()
   }
 })
 
 const resentEmail = () => {
-  authStore.resendEmailConfirmation(props.email)
-  if (instance) {
-    toast(instance.$t('login.sentMailSuccess'), {
-      type: 'success'
+  authStore
+    .resendEmailConfirmation(props.email)
+    .then(() => {
+      if (instance) {
+        toast(instance.$t('login.sentMailSuccess'), {
+          type: 'success'
+        })
+      }
     })
-  }
+    .catch((err) => {
+      if (err) {
+        if (instance) {
+          toast(instance.$t('login.sentMailError'), {
+            type: 'error'
+          })
+        }
+      }
+    })
+
   checkDisabled()
 }
 

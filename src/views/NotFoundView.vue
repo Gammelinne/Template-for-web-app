@@ -17,82 +17,75 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue';
 
 interface SnakeCell {
-  x: number
-  y: number
+  x: number;
+  y: number;
 }
 
-let canvas: HTMLCanvasElement | null
-let ctx: CanvasRenderingContext2D | null
-let snake: SnakeCell[]
-let food: SnakeCell
-let direction: { x: number; y: number } = { x: 0, y: 1 }
-let score = ref(0)
-let lastUpdateTime = 0
+let canvas: HTMLCanvasElement | null;
+let ctx: CanvasRenderingContext2D | null;
+let snake: SnakeCell[];
+let food: SnakeCell;
+let direction: { x: number; y: number } = { x: 0, y: 1 };
+let score = ref(0);
+let lastUpdateTime = 0;
+let isMounted = ref(true); // Variable pour vérifier si le composant est monté
 
-const cellSize = 25
-const speed = 200
+const cellSize = 25;
+const speed = 200;
 
-// Utilise la largeur du navigateur pour définir la taille du canvas
-const getBrowserWidth = () => window.innerWidth - 80
-
-const canvasWidth = getBrowserWidth()
-const canvasHeight = 400
+const canvasWidth = window.innerWidth - 80;
+const canvasHeight = 400;
 
 const createCanvas = () => {
-  canvas = document.querySelector('canvas')
+  canvas = document.querySelector('canvas');
   if (canvas) {
-    ctx = canvas.getContext('2d')
-    // Utilise la largeur et la hauteur calculées pour définir la taille du canvas
-    canvas.width = canvasWidth
-    canvas.height = canvasHeight
+    ctx = canvas.getContext('2d');
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
   }
-}
+};
 
 const createSnake = () => {
-  snake = [
-    { x: Math.floor(canvasWidth / cellSize / 2), y: Math.floor(canvasHeight / cellSize / 2) }
-  ]
-}
+  snake = [{ x: Math.floor(canvasWidth / cellSize / 2), y: Math.floor(canvasHeight / cellSize / 2) }];
+};
 
 const createFood = () => {
   food = {
     x: Math.floor(Math.random() * (canvasWidth / cellSize)),
-    y: Math.floor(Math.random() * (canvasHeight / cellSize))
-  }
-}
+    y: Math.floor(Math.random() * (canvasHeight / cellSize)),
+  };
+};
 
 const draw = () => {
-  if (ctx) {
-    ctx.clearRect(0, 0, canvas!.width, canvas!.height)
+  if (ctx && isMounted.value) {
+    ctx.clearRect(0, 0, canvas!.width, canvas!.height);
 
     // Draw snake
-    ctx.fillStyle = 'green'
+    ctx.fillStyle = 'green';
     snake.forEach((cell) => {
-      ctx?.fillRect(cell.x * cellSize, cell.y * cellSize, cellSize, cellSize)
-    })
+      ctx?.fillRect(cell.x * cellSize, cell.y * cellSize, cellSize, cellSize);
+    });
 
     // Draw food
-    ctx.fillStyle = 'red'
-    ctx.fillRect(food.x * cellSize, food.y * cellSize, cellSize, cellSize)
+    ctx.fillStyle = 'red';
+    ctx.fillRect(food.x * cellSize, food.y * cellSize, cellSize, cellSize);
   }
-}
+};
 
 const update = (currentTime: number) => {
   if (currentTime - lastUpdateTime > speed) {
-    // Update snake position, check collisions, etc.
-    if (!snake || snake.length === 0 || !direction) {
-      return
+    if (!snake || snake.length === 0 || !direction || !isMounted.value) {
+      return;
     }
 
     const newHead = {
       x: snake[0].x + direction.x,
-      y: snake[0].y + direction.y
-    }
+      y: snake[0].y + direction.y,
+    };
 
-    // Check if snake collides with walls or itself
     if (
       newHead.x < 0 ||
       newHead.x >= canvasWidth / cellSize ||
@@ -100,32 +93,30 @@ const update = (currentTime: number) => {
       newHead.y >= canvasHeight / cellSize ||
       isCollisionWithSelf(newHead)
     ) {
-      // Game over, reset
-      score.value = 0
-      createSnake()
+      score.value = 0;
+      createSnake();
     } else {
-      snake.unshift(newHead)
+      snake.unshift(newHead);
 
-      // Check if snake eats food
       if (newHead.x === food.x && newHead.y === food.y) {
-        score.value += 1
-        createFood() // Déplace createFood ici
+        score.value += 1;
+        createFood();
       } else {
-        snake.pop()
+        snake.pop();
       }
     }
 
-    draw()
+    draw();
 
-    lastUpdateTime = currentTime
+    lastUpdateTime = currentTime;
   }
 
-  requestAnimationFrame(() => update(performance.now()))
-}
+  requestAnimationFrame(() => update(performance.now()));
+};
 
 const isCollisionWithSelf = (head: SnakeCell) => {
-  return snake.slice(1).some((cell) => cell.x === head.x && cell.y === head.y)
-}
+  return snake.slice(1).some((cell) => cell.x === head.x && cell.y === head.y);
+};
 
 const handleKeydown = (event: KeyboardEvent) => {
   if (
@@ -134,48 +125,40 @@ const handleKeydown = (event: KeyboardEvent) => {
     event.key === 'ArrowLeft' ||
     event.key === 'ArrowRight'
   ) {
-    event.preventDefault()
+    event.preventDefault();
     if (event.key === 'ArrowUp' && direction.y !== 1) {
-      direction = { x: 0, y: -1 }
+      direction = { x: 0, y: -1 };
     } else if (event.key === 'ArrowDown' && direction.y !== -1) {
-      direction = { x: 0, y: 1 }
+      direction = { x: 0, y: 1 };
     } else if (event.key === 'ArrowLeft' && direction.x !== 1) {
-      direction = { x: -1, y: 0 }
+      direction = { x: -1, y: 0 };
     } else if (event.key === 'ArrowRight' && direction.x !== -1) {
-      direction = { x: 1, y: 0 }
+      direction = { x: 1, y: 0 };
     }
   }
-}
-
-const handleWheel = (event: WheelEvent) => {
-  // Bloquer le scroll seulement si la molette de la souris est utilisée
-  event.preventDefault()
-}
+};
 
 const gameLoop = () => {
-  createCanvas()
-  createSnake()
-  createFood()
+  createCanvas();
+  createSnake();
+  createFood();
 
   const loop = () => {
-    draw()
-    update(performance.now())
-    requestAnimationFrame(loop)
-  }
+    draw();
+    update(performance.now());
+    setTimeout(loop, 1000 / 60); // Run at 60 frames per second
+  };
 
-  loop()
-}
+  loop();
+};
 
 onMounted(() => {
-  // Bloquer le scroll seulement sur cette page
-  document.body.addEventListener('wheel', handleWheel, { passive: false })
-  gameLoop()
-  window.addEventListener('keydown', handleKeydown)
-})
+  gameLoop();
+  window.addEventListener('keydown', handleKeydown);
+});
 
 onUnmounted(() => {
-  // Rétablir le scroll quand la page est démontée
-  document.body.removeEventListener('wheel', handleWheel)
-  window.removeEventListener('keydown', handleKeydown)
-})
+  isMounted.value = false; // Définir la variable isMounted à false lors du démontage
+  window.removeEventListener('keydown', handleKeydown);
+});
 </script>

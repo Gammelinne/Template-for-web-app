@@ -1,5 +1,9 @@
 <template>
   <VFooter padless class="text-center">
-    <VBtn to="/settings" block rounded="0" elevation="0">{{ $t('setting.title') }}</VBtn>
+    <VBtn @click="authStore.logout"  prepend-icon="mdi-logout" block elevation="0">{{ $t('logout.title') }}</VBtn>
   </VFooter>
 </template>
+
+<script setup lang="ts">
+import { authStore } from '@/pinia-provider'
+</script>

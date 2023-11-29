@@ -14,6 +14,7 @@ const recaptcha = async () => {
     return await instance.$recaptcha('login')
   }
 }
+
 const callback = async (response: any) => {
   // This callback will be triggered when the user selects or login to
   // his Google account from the popup
@@ -21,15 +22,11 @@ const callback = async (response: any) => {
 }
 const login = async () => {
   const token = await recaptcha()
-  authStore
-    .login({
-      recpatchaToken: token,
-      email: credential.value.email,
-      password: credential.value.password
-    })
-    .then(() => {
-      instance?.$router.push('/')
-    })
+  await authStore.login({
+    recpatchaToken: token,
+    email: credential.value.email,
+    password: credential.value.password
+  })
 }
 
 const props = defineProps({

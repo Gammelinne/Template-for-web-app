@@ -49,5 +49,13 @@
     "title": "Error 404",
     "score": "Your score",
     "button": "Home"
+  },
+  "drawer" :{
+    "account" : "My account",
+    "favories" : "Favories",
+    "commands" : "All commands"
+  },
+  "logout":{
+    "title" : "Logout"
   }
 }

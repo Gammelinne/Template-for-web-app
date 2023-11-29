@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 //Pinia
 import pinia from '@/pinia-provider'
-
 //recaptcha
 import { VueReCaptcha } from 'vue-recaptcha-v3'
 

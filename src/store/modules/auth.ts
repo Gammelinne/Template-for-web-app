@@ -6,12 +6,12 @@ import router from '@/router'
 export interface AuthUser {
   token: string | null
   user: {
-    id?: string
     avatar?: string
     email?: string
     username?: string
     firstName?: string
     lastName?: string
+    emailVerifiedAt?: string
   }
   loading: boolean
   error: any
@@ -33,33 +33,26 @@ export const useAuthStore = defineStore({
       state.error
   },
   actions: {
-    async login({
-      email,
-      password,
-      recpatchaToken
-    }: {
-      email: string
-      password: string
-      recpatchaToken: string
-    }): Promise<void> {
+
+    async login({ email, password, recpatchaToken }: { email: string; password: string; recpatchaToken: string }): Promise<void> {
       try {
-        this.error = null
-        this.loading = true
-        localStorage.removeItem('token')
-        const response: AxiosResponse<{
-          token: { token: string; type: string }
-          user: { id?: string; avatar?: string; email?: string }
-        }> = await axios.post('/login', {
-          recpatchaToken,
-          email,
-          password
-        })
-        const { token, user: loggedInUser } = response.data
-        this.handleAuthSuccess(token.token, loggedInUser)
-        this.fetchUser()
-        router.push('/')
+        this.clearError();
+        this.loading = true;
+        localStorage.removeItem('token');
+
+        const { data } = await axios.post('/login', { recpatchaToken, email, password });
+
+        const { token, user: loggedInUser } = data;
+        this.handleAuthSuccess(token.token, loggedInUser);
+        this.fetchUser();
+        await router.push('/');
       } catch (error) {
-        this.handleAuthError(error)
+        await this.handleAuthError(error)
+        if (this.error.message === 'Email not verified') {
+          await router.push('/verify-email/' + email)
+        }
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -77,7 +70,7 @@ export const useAuthStore = defineStore({
             recpatchaToken
           })
           .then((response) => {
-            this.user.id = response.data.userId
+            this.user.email = response.data.email
           })
         this.loading = false
         return true
@@ -104,6 +97,7 @@ export const useAuthStore = defineStore({
           .then((response) => {
             const { token, user: loggedInUser } = response.data
             this.handleAuthSuccess(token.token, loggedInUser)
+            this.fetchUser()
             router.push('/')
           })
         this.loading = false
@@ -114,14 +108,15 @@ export const useAuthStore = defineStore({
 
     async logout(): Promise<void> {
       try {
-        this.error = null
-        this.loading = true
-        await axios.post('/logout')
-        localStorage.removeItem('token')
-        delete axios.defaults.headers.common['Authorization']
-        this.handleAuthSuccess('', {})
-      } catch (error) {
-        this.handleAuthError(error)
+        this.clearError();
+        this.loading = true;
+        await axios.post('/logout');
+        localStorage.removeItem('token');
+        delete axios.defaults.headers.common['Authorization'];
+        this.handleAuthSuccess('', {});
+      } finally {
+        this.loading = false;
+        router.push('/login');
       }
     },
 
@@ -134,7 +129,7 @@ export const useAuthStore = defineStore({
         this.user = response.data
         this.loading = false
       } catch (error) {
-        //router.push('/login')
+        router.push('/login')
         this.handleAuthError(error)
       }
     },
@@ -222,7 +217,7 @@ export const useAuthStore = defineStore({
       this.error = null
     },
 
-    handleAuthError(error: any): void {
+    async handleAuthError(error: any): Promise<void> {
       this.error = error.response.data
       localStorage.removeItem('token')
       this.loading = false

@@ -23,7 +23,14 @@ const router = createRouter({
     {
       name: 'reset-password',
       path: '/reset-password',
-      component: () => import('@/views/ForgotPasswordView.vue')
+      component: () => import('@/views/ForgotPasswordView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      name: 'verify-email',
+      path: '/verify-email/:email',
+      component: () => import('@/views/VerifyemailView.vue'),
+      meta: {requireAuth: false}
     },
     /* {
       name: 'policies',
@@ -36,25 +43,29 @@ const router = createRouter({
       path: '/:pathMatch(.*)*',
       component: () => import('@/views/NotFoundView.vue'),
       meta: { requiresAuth: false }
-    }
+    },
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (authStore.isLoggedIn) {
+  if (localStorage.getItem('token')) {
     if (to.name === 'Login' || to.name === 'Register') {
-      authStore.logout()
-    }
-  }
-  if (to.meta.requiresAuth) {
-    if (authStore.isLoggedIn) {
-      next()
+      next('/')
+    } else if (to.meta.requiresAuth) {
+      if (authStore.isLoggedIn) {
+        next()
+      } else {
+        next('/login')
+      }
     } else {
-      next('/login')
+      next()
     }
+  } else if (to.meta.requiresAuth) {
+    next('/login')
   } else {
     next()
   }
+
 })
 
 export default router
