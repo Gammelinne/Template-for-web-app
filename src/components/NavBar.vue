@@ -24,7 +24,7 @@ const toggleDrawer = () => {
     <ThemeToggleButton v-if="!authStore.isLoggedIn" />
     <LanguageSelector v-if="!authStore.isLoggedIn" />
     <VBtn v-if="authStore.isLoggedIn" icon @click="toggleDrawer">
-      <VAvatar><v-img cover :src="authStore.user.avatar"></v-img></VAvatar>
+      <VAvatar :image="authStore.user.avatar + '?v=' + Math.random()" />
     </VBtn>
   </VAppBar>
   <VNavigationDrawer
