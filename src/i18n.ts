@@ -1,9 +1,13 @@
 import { createI18n } from 'vue-i18n'
 
-// Function to load locale messages from the locales directory
+// Type for locales
+interface Locales {
+  [key: string]: Record<string, string>
+}
 
-async function loadLocaleMessages() {
-  const locales: Record<string, any> = {}
+// Function to load locale messages from the locales directory
+async function loadLocaleMessages(): Promise<Locales> {
+  const locales: Locales = {}
   const files = import.meta.glob('./locales/*.json')
 
   await Promise.all(
@@ -20,7 +24,7 @@ async function loadLocaleMessages() {
 }
 
 // Fonction to determine the user's current locale
-function determineLocale() {
+function determineLocale(locales: Locales): string {
   const browserLanguage = navigator.language.split('-')[0] // Use browser locale without region code
   return browserLanguage in locales ? browserLanguage : 'en'
 }
@@ -30,9 +34,9 @@ const locales = await loadLocaleMessages()
 // Create a new instance of VueI18n
 const i18n = createI18n({
   legacy: false,
-  locale: determineLocale(),
+  locale: determineLocale(locales),
   fallbackLocale: 'en',
-  messages: locales
+  messages: locales,
 })
 
 export default i18n

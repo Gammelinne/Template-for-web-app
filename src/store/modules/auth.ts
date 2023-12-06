@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from '@/axios'
 import router from '@/router'
 import { toast } from 'vue3-toastify'
+import i18n from '@/i18n'
 export interface AuthUser {
   token: string | null
   user: {
@@ -120,6 +121,7 @@ export const useAuthStore = defineStore({
         localStorage.removeItem('token')
         delete axios.defaults.headers.common['Authorization']
         this.handleAuthSuccess('', {})
+        this.$patch({ token: null })
       } finally {
         this.loading = false
         router.push('/login')
@@ -151,7 +153,7 @@ export const useAuthStore = defineStore({
           await axios.put('/users/update', formData).then((response) => {
             this.user = { ...this.user, ...response.data.user }
           })
-          toast('test', {
+          toast(i18n.global.t('form.SuccessUpdate'), {
             type: 'success'
           })
         } else {
@@ -161,7 +163,6 @@ export const useAuthStore = defineStore({
               password: password
             })
             .then((response) => {
-              console.log(response.data)
               this.user = { ...this.user, ...response.data.user }
             })
         }
@@ -170,21 +171,26 @@ export const useAuthStore = defineStore({
         this.handleAuthError(error)
       }
     },
-    async sendResetPasswordEmail(email: string): Promise<void> {
-      try {
-        this.error = null
-        this.loading = true
-        localStorage.removeItem('token')
-        delete axios.defaults.headers.common['Authorization']
-        await axios.post('/reset-password-email', {
+    async sendResetPasswordEmail(email: string): Promise<any> {
+      this.error = null
+      this.loading = true
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['Authorization']
+      await axios
+        .post('/reset-password-email', {
           email
         })
-      } catch (error) {
-        this.handleAuthError(error)
-      } finally {
-        this.loading = false
-      }
+        .then(() => {
+          toast(i18n.global.t('form.sendEmail'), {
+            type: 'success'
+          })
+        })
+        .catch((error) => {
+          this.handleAuthError(error)
+        })
+      this.loading = false
     },
+
     async resetPassword(
       password: String,
       password_confirmation: String,

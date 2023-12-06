@@ -1,18 +1,10 @@
 <script setup lang="ts">
 import { authStore } from '@/pinia-provider'
-import { ref, getCurrentInstance } from 'vue'
-import { toast } from 'vue3-toastify'
-
-const instance = getCurrentInstance()?.appContext.config.globalProperties
+import { ref } from 'vue'
 
 const email = ref('')
 const resetPassword = () => {
   authStore.sendResetPasswordEmail(email.value)
-  if (instance) {
-    toast(instance.$t('login.sentMailSuccess'), {
-      type: 'success'
-    })
-  }
   props.toogleForm()
 }
 const props = defineProps({
@@ -26,6 +18,15 @@ const props = defineProps({
   <VCard max-width="600" class="mx-auto">
     <VCardTitle>{{ $t('login.forgotPassword') }}</VCardTitle>
     <VCardText>
+      <VAlert
+        class="my-2"
+        v-if="authStore.error?.message"
+        type="error"
+        closable
+        icon="mdi-alert-circle-outline"
+      >
+        {{ authStore.error.message }}
+      </VAlert>
       <VTextField
         autocomplete="username"
         variant="outlined"

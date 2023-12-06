@@ -76,7 +76,12 @@ const props = defineProps({
           {{ $t('login.title') }}
         </VBtn>
       </VForm>
-      <GoogleLogin :callback="callback" prompt auto-login />
+      <div class="text-center my-2">
+        <h5>{{ $t('form.or') }}</h5>
+      </div>
+      <div class="text-center my-2">
+        <GoogleLogin :callback="callback" prompt auto-login />
+      </div>
       <p class="my-2" @click="$router.push('/register')" style="cursor: pointer">
         {{ $t('register.welcome') }}
       </p>

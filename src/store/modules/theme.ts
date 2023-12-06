@@ -7,9 +7,11 @@ export const useThemeStore = defineStore({
   }),
   actions: {
     checkUserTheme() {
-      localStorage.getItem('theme')
-        ? this.$patch({ isLight: true })
-        : this.$patch({ isLight: false })
+      if (localStorage.getItem('theme')) {
+        localStorage.getItem('theme') === 'true'
+          ? this.$patch({ isLight: true })
+          : this.$patch({ isLight: false })
+      }
     },
     toggleTheme() {
       this.$patch({ isLight: !this.isLight })

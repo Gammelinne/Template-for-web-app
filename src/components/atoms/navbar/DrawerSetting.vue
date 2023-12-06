@@ -2,6 +2,8 @@
 import { authStore } from '@/pinia-provider'
 import ThemeToggleButton from '@/components/atoms/navbar/ThemeToggleButton.vue'
 import LanguageSelector from '@/components/atoms/navbar/LanguageSelector.vue'
+import { getCurrentInstance } from 'vue'
+const instance = getCurrentInstance()?.appContext.config.globalProperties
 </script>
 
 <template>
@@ -9,8 +11,16 @@ import LanguageSelector from '@/components/atoms/navbar/LanguageSelector.vue'
     <VListItemTitle class="my-1" align="center">
       {{ authStore.user.firstName }} {{ authStore.user.lastName }}
     </VListItemTitle>
-    <VListItemSubtitle class="my-1" align="center">
-      {{ authStore.user.email }}
+    <VListItemSubtitle>
+      <VBtn
+        rounded="0"
+        size="small"
+        @click="instance?.$router.push('profile')"
+        block
+        elevation="0"
+        prepend-icon="mdi-account-outline"
+        >{{ $t('drawer.account') }}</VBtn
+      >
     </VListItemSubtitle>
     <VDivider />
     <ThemeToggleButton />
