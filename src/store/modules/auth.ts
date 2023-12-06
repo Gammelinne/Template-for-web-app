@@ -181,7 +181,7 @@ export const useAuthStore = defineStore({
           email
         })
         .then(() => {
-          toast(i18n.global.t('form.sendEmail'), {
+          toast(i18n.global.t('form.emailConfirmation'), {
             type: 'success'
           })
         })
@@ -206,6 +206,7 @@ export const useAuthStore = defineStore({
           token
         })
         this.loading = false
+        router.push('/login')
       } catch (error) {
         this.handleAuthError(error)
       }

@@ -35,7 +35,8 @@
     "passwordNumber": "Password must contain at least one number",
     "passwordSpecialChar": "Password must contain at least one special character",
     "emailConfirmation": "We have sent you an email to confirm your email address. Please check your inbox.",
-    "resendEmail": "Resend email"
+    "resendEmail": "Resend email",
+    "or" : "Or"
   },
   "footer": {
     "message": "A open Source project made by RENAULT Kylian"
@@ -50,12 +51,15 @@
     "score": "Your score",
     "button": "Home"
   },
-  "drawer" :{
-    "account" : "My account",
-    "favories" : "Favories",
-    "commands" : "All commands"
+  "drawer": {
+    "account": "My account",
+    "favories": "Favories",
+    "commands": "All commands"
   },
-  "logout":{
-    "title" : "Logout"
+  "logout": {
+    "title": "Logout"
+  },
+  "resetPassword":{
+    "title": "Create a new password"
   }
 }

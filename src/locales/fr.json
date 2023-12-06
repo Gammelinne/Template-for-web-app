@@ -35,7 +35,8 @@
     "passwordNumber": "Le mot de passe doit contenir au moins un chiffre",
     "passwordSpecialChar": "Le mot de passe doit contenir au moins un caractère spécial",
     "emailConfirmation": "Nous vous avons envoyé un mail, veuillez regardez vos nouveau courriels",
-    "resendEmail": "Renvoyer email"
+    "resendEmail": "Renvoyer email",
+    "or": "Ou"
   },
   "footer": {
     "message": "Un projet open source par RENAULT Kylian"
@@ -49,5 +50,14 @@
     "title": "Erreur 404",
     "score": "Votre score",
     "button" : "Accueil"
+  },
+  "drawer" :{
+    "account" : "Mon compte"
+  },
+  "logout":{
+    "title": "se déconnecter"
+  },
+  "resetPassword":{
+    "title": "Créer un nouveau mot de passe"
   }
 }
